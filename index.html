@@ -23,7 +23,7 @@
              <h1>Unknown Song</h1>
              <p>Unknown Artist</p>
 
-             <audio controls>
+             <audio id="song">
                 <source src="media/Well_I_Wonder.mpeg" type="audio/mpeg">
              </audio>
 
@@ -33,8 +33,8 @@
                 <div>
                     <i class="fa-solid fa-backward"></i>
                 </div>
-                <div>
-                    <i class="fa-solid fa-play"></i>
+                <div onclick="playPause()">
+                    <i class="fa-solid fa-play" id="ctrlIcon"></i>
                 </div>
                 <div>
                     <i class="fa-solid fa-forward"></i>
@@ -42,5 +42,45 @@
              </div>
         </div>
     </div>
+
+    <script>
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+
+        song.onloadedmetadata = function(){
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        function playPause(){
+            if(ctrlIcon.classList.contains("fa-pause")){
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            }
+            else{
+                song.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+            }
+        }
+
+        if(song.play()){
+            setInterval(()=>{
+                progress.value = song.currentTime;
+            }, 500);
+            ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+        }
+
+        progress.onchange = function(){
+            song.play();
+            song.currentTime = progress.value;
+            ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+        }
+
+    </script>
 </body>
 </html>
